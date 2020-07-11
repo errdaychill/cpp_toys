@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cmath>
 #include <cstdlib> //srand, rand
-#include <vector>
 #include <ctime>
 
 using namespace std;
@@ -47,7 +46,7 @@ class Matrix
             delete[] mat;
         }
 
-
+        // print matrix
         void matrix()
         {
             for(int i = 0; i < row_; i++)
@@ -77,9 +76,11 @@ class Matrix
             for(int i = 0; i < row_; i++)
                 for(int j = 0; j < col_; j++)
                     m1[i][j] += m2[i][j];
+
+            return m1;
         }
         
-        Matrix minus(const Matrix& m1, const Matrix& m2)
+        Matrix sub(const Matrix& m1, const Matrix& m2)
         {
             if (m1.row_ != m2.row_ && m1.col_ != m2.col_)
             {
@@ -89,9 +90,11 @@ class Matrix
             for(int i = 0; i < row_; i++)
                 for(int j = 0; j < col_; j++)
                     m1[i][j] += m2[i][j];
+                    
+            return m1;
         }
 
-        Matrix mult(const Matrix& m1, const Matrix& m2)
+        Matrix mul(const Matrix& m1, const Matrix& m2)
         {
             if (m1.col_ != m2.row_)
             {
@@ -101,33 +104,142 @@ class Matrix
             for(int i = 0; i < row_; i++)
                 for(int j = 0; j < col_; j++)
                     m1[i][j] += m2[i][j];
+
+            return m1;
+        }
+        
+        // 차원 크기는 따로 선언 안해줘도 되나???
+
+        void getSubMat(const Matrix& big_mat, const Matrix& sub_mat, const int& p, const int& q)
+        {
+            
+            int a = 0, b = 0;
+            for (int i = 0; i < mat.row_ - 1; i++)
+                for (int j = 0; j < mat.col_ - 1; j++)
+                    if (i != p && j != q)
+                        {
+                            // 이해 X. 왜 그대로
+                            sub_mat[a][b++] = big_mat[i][j];
+                            if (b == mat.row_ - 1)
+                            {
+                                b = 0;
+                                a++;
+                            }
+                        }
+
+        }   
+
+
+
+        // 행렬 차원 어떡하징
+        double deterministic(const Matrix& mat)
+        {
+            int d = 0;
+            static int n = mat.row_;
+
+            if (mat.row_ == 1)
+                return mat[0][0]
+
+            double temp[mat.row_][mat.col_];
+            int sign_num = -1;
+
+            for (int col = 0; col < mat.col_; col++)
+            {
+                getSubMat(temp, 0, col);
+                d += pow(sign_num, col) * mat[0][j] * deterministic(temp);
+
+            }
+
+            return d;
         }
 
-        Matrix inverse(const Matrix& mat)
+        void adjoint(const Matrix& mat, const Matrix& adj_mat)
         {
-            if (mat.col_ != mat.row_)
-                cout << "matrix isn't squre" << endl;
+            if (mat.row_ == 1)
+                adj_mat[0][0] = 1;
+                return ;
+
+            int sign_num = 1, temp[mat.row_][mat.col_];
+            for (int i = 0; i < row_; i++)
+            {
+                for (int j = 0; j < col_; j++)
+                {
+                    getSubMat(mat, temp, i, j);
+                    sign_num = ((i+j) % 2 ==0?) 1 : -1;
+                    
+                    adj_mat[i][j] = sign_num * (deterministic(temp));
+                }
+            } 
             
 
-
         }
-        Matrix transpose(const Matrix& m1, const Matrix& m2))
-        Matrix eye(const Matrix& m1, const Matrix& m2))
-        int mult(const Matrix& m1, const Matrix& m2))
+
+
+        // 전치 언제해줌??
+        void inv(const Matrix& mat)
+        {
+            det = deterministic(mat);
+
+            if (det == 0)
+                cout << "matrix doesn't have a inverse matrix" << endl;
+
+
+            if (mat.row_ !=  mat.col_)
+            {
+                cout << "It's not a square matrix" << endl;
+            }
+
+            double inv_mat[row_][col_];
+            
+            int adj_mat[row_][col_];
+            adjoint(mat, adj_mat);
+
+            for (int i = 0; i < row_; i++)
+                for(int j = 0; j < col_; j++)
+                {
+                    inv_mat[i][j] = adj[i][j] / det;
+                }
+                    
+            for (int i = 0; i < row_; i++)
+            {
+                for(int j = 0; j < col_; j++)
+                {
+                    cout << inv_mat[i][j] << " " ;
+                }
+                cout << endl;
+            }    
+        }
 
         
+        void transpose(const Matrix& mat)
+        {
+             auto array[mat.col_][mat.row_];
+
+             for(int i = 0; i < row_; i++)
+                for(int j = 0; j < col_; j++)
+                    array[j][i] = mat[i][j];
+             
+             for(int i = 0; i < row_; i++)
+                for(int j = 0; j < col_; j++)
+                    cout << array[i][j] << " ";
+                cout << endl;
+
+            
+        }
+                
+        void eye(const int& n)
+        {
+            int array[n][n]{};
+          
+             for(int i = 0; i < row_; i++)
+                for(int j = 0; j < col_; j++)
+                    // 삼항연산자!!!!
+                    array[i][j] = (i == j ? 1 : 0);
+                    cout << array[i][j] << " ";
+                cout << endl;
+        }
+
+        void 
+
+
 };
-
-
-
-
-
-int main()
-{
-
-
-
-
-
-    return 0;
-}
