@@ -2,6 +2,7 @@
 #include <cmath>
 #include <cstdlib> //srand, rand
 #include <ctime>
+#include <vector>
 
 using namespace std;
 
@@ -66,7 +67,7 @@ class Matrix
 
 
         //어떻게 객체인 자기자신을 받나??? 조금 이해가 안된다.
-        Matrix add(const Matrix& m1, const Matrix& m2)
+        Matrix add(Matrix& m1, Matrix& m2)
         {
             if (m1.row_ != m2.row_ && m1.col_ != m2.col_)
             {
@@ -80,7 +81,7 @@ class Matrix
             return m1;
         }
         
-        Matrix sub(const Matrix& m1, const Matrix& m2)
+        Matrix sub(Matrix& m1, Matrix& m2)
         {
             if (m1.row_ != m2.row_ && m1.col_ != m2.col_)
             {
@@ -94,7 +95,7 @@ class Matrix
             return m1;
         }
 
-        Matrix mul(const Matrix& m1, const Matrix& m2)
+        Matrix mul(Matrix& m1, Matrix& m2)
         {
             if (m1.col_ != m2.row_)
             {
@@ -110,7 +111,7 @@ class Matrix
         
         // 차원 크기는 따로 선언 안해줘도 되나???
 
-        void getSubMat(const Matrix& big_mat, const Matrix& sub_mat, const int& p, const int& q)
+        void getSubMat(Matrix& big_mat, Matrix& sub_mat, const int& p, const int& q)
         {
             
             int a = 0, b = 0;
@@ -132,7 +133,7 @@ class Matrix
 
 
         // 행렬 차원 어떡하징
-        double deterministic(const Matrix& mat)
+        double deterministic(Matrix& mat)
         {
             int d = 0;
             static int n = mat.row_;
@@ -153,7 +154,7 @@ class Matrix
             return d;
         }
 
-        void adjoint(const Matrix& mat, const Matrix& adj_mat)
+        void adjoint(Matrix& mat, Matrix& adj_mat)
         {
             if (mat.row_ == 1)
                 adj_mat[0][0] = 1;
@@ -176,7 +177,7 @@ class Matrix
 
 
         // 전치 언제해줌??
-        void inv(const Matrix& mat)
+        void inv(Matrix& mat)
         {
             det = deterministic(mat);
 
@@ -211,9 +212,9 @@ class Matrix
         }
 
         
-        void transpose(const Matrix& mat)
+        void transpose(Matrix& mat)
         {
-             auto array[mat.col_][mat.row_];
+             int array[mat.col_][mat.row_];
 
              for(int i = 0; i < row_; i++)
                 for(int j = 0; j < col_; j++)
@@ -226,7 +227,7 @@ class Matrix
 
             
         }
-                
+                  
         void eye(const int& n)
         {
             int array[n][n]{};
@@ -239,7 +240,9 @@ class Matrix
                 cout << endl;
         }
 
-        void 
+        
+
+        
 
 
 };
