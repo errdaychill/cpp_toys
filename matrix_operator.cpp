@@ -58,15 +58,18 @@ class Matrix
         
 
 
-        double randMat(const int& row, const int& column)
+        void randMat(const int& row, const int& column)
         {
-
-              double rand_mat[row][column]{};
-              rand();
+            Matrix randMat[row][int];
+            for(int i = 0; i < row_; i++)
+                for(int j = 0; j < col_; j++)
+                    randMat[i][j] = rand() / 10000;
+            
+            return randMat;
+                    
         }
 
 
-        //어떻게 객체인 자기자신을 받나??? 조금 이해가 안된다.
         Matrix add(Matrix& m1, Matrix& m2)
         {
             if (m1.row_ != m2.row_ && m1.col_ != m2.col_)
@@ -90,7 +93,7 @@ class Matrix
 
             for(int i = 0; i < row_; i++)
                 for(int j = 0; j < col_; j++)
-                    m1[i][j] += m2[i][j];
+                    m1[i][j] -= m2[i][j];
                     
             return m1;
         }
@@ -102,15 +105,17 @@ class Matrix
                 cout << "dimension isn't matched" << endl;
             }
 
+            Matrix mul_mat{};
+
             for(int i = 0; i < row_; i++)
                 for(int j = 0; j < col_; j++)
-                    m1[i][j] += m2[i][j];
+                    for(int k = 0; k < col_; k++)
+                        mul_mat[i][j] += (m1[i][k] * m2[k][j]);
 
-            return m1;
+            return mul_mat;
         }
         
         // 차원 크기는 따로 선언 안해줘도 되나???
-
         void getSubMat(Matrix& big_mat, Matrix& sub_mat, const int& p, const int& q)
         {
             
@@ -240,7 +245,10 @@ class Matrix
                 cout << endl;
         }
 
-        
+        void getIndex(const int& row_idx, const int& col_idx)
+        {
+            cout << 
+        }
 
         
 
