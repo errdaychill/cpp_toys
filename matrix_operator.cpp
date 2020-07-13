@@ -2,7 +2,7 @@
 #include <cmath>
 #include <cstdlib> //srand, rand
 #include <ctime>
-#include <vector>
+#include <random>
 
 using namespace std;
 
@@ -12,7 +12,7 @@ class Matrix
     private:
         int row_;
         int col_;
-        int **mat;
+        double **mat;
 
     public:
         Matrix(const int& row=0, const int& column=0)
@@ -20,13 +20,10 @@ class Matrix
 
             row_ = row;
             col_ = column;
-            // vector<int> row_vec[row_]{};
-            // vector<int> col_vec[col_]{};
-            
-            // 2차원 배열 동적 할당 
-            mat = new int*[row_];
+
+            mat = new double*[row_];
             for(int i = 0; i < row_; i++)
-                mat[i] = new int[col_];
+                mat[i] = new double[col_];
             
             // 0으로 초기화
             for(int i = 0; i < row_; i++)
@@ -48,61 +45,84 @@ class Matrix
         }
 
         // print matrix
-        void matrix()
+        void print()
         {
             for(int i = 0; i < row_; i++)
+            {
+                cout << " | "; 
                 for(int j = 0; j < col_; j++)
-                    cout << mat[j] << " ";
-                cout << endl;
+                {
+                    cout << mat[i][j] << " ";
+                }
+                cout << " | " << endl;
+            }
         }
         
 
 
-        void randMat(const int& row, const int& column)
+        Matrix randMat(const int& row, const int& column)
         {
-            Matrix randMat[row][int];
+            Matrix m1;
+            //mean = 0, std = 1
+            // random_device로 난수 생성 엔진 초기화
+            normal_distribution<> d{0,1};
+            random_device rd;
+            mt19937 gen(rd());
             for(int i = 0; i < row_; i++)
+            {
                 for(int j = 0; j < col_; j++)
-                    randMat[i][j] = rand() / 10000;
-            
-            return randMat;
-                    
+                {
+                    m1[i][j] = d(gen);
+                }
+            }
+            return m1;
         }
 
-
-        Matrix add(Matrix& m1, Matrix& m2)
+        // 왜 파라미터 하나만?
+        Matrix operator+(Matrix& m1)
         {
+            Matrix m2;
             if (m1.row_ != m2.row_ && m1.col_ != m2.col_)
             {
-                cout << "dimension isn't matched" << endl;
+                throw out_of_range("Dimension doesn't match each other.");
             }
-            
-            for(int i = 0; i < row_; i++)
-                for(int j = 0; j < col_; j++)
-                    m1[i][j] += m2[i][j];
 
+            for (int i = 0; i < row_ ; i++)
+            {
+                for (int j = 0; j < col_; j++)
+                {
+                    m1.mat[i][j] = mat[i][j] + m2.mat[i][j];
+                    
+                }
+            }
             return m1;
+            
         }
         
-        Matrix sub(Matrix& m1, Matrix& m2)
+        Matrix operator-(Matrix& m1)
         {
+            Matrix m2;
             if (m1.row_ != m2.row_ && m1.col_ != m2.col_)
             {
-                cout << "dimension isn't matched" << endl;
+                throw out_of_range("Dimension doesn't match each other.");
             }
 
-            for(int i = 0; i < row_; i++)
-                for(int j = 0; j < col_; j++)
-                    m1[i][j] -= m2[i][j];
-                    
+            for (int i = 0; i < row_ ; i++)
+            {
+                for (int j = 0; j < col_; j++)
+                {
+                    m1.mat[i][j] = mat[i][j] - m2.mat[i][j];
+                }
+            }
             return m1;
         }
 
-        Matrix mul(Matrix& m1, Matrix& m2)
+        Matrix operator*(Matrix& m1)
         {
+            Matrix m2;
             if (m1.col_ != m2.row_)
             {
-                cout << "dimension isn't matched" << endl;
+                throw out_of_range("size of m1.axis 1 and m2.axis 0 doesn't match together.");
             }
 
             Matrix mul_mat{};
@@ -110,9 +130,9 @@ class Matrix
             for(int i = 0; i < row_; i++)
                 for(int j = 0; j < col_; j++)
                     for(int k = 0; k < col_; k++)
-                        mul_mat[i][j] += (m1[i][k] * m2[k][j]);
+                        m1.mat[i][j] = mat[i][k] * m2.mat[k][j];
 
-            return mul_mat;
+            return m1;
         }
         
         // 차원 크기는 따로 선언 안해줘도 되나???
@@ -233,24 +253,33 @@ class Matrix
             
         }
                   
-        void eye(const int& n)
+        Matrix eye(const int& n)
         {
-            int array[n][n]{};
+            Matrix m1;
           
              for(int i = 0; i < row_; i++)
                 for(int j = 0; j < col_; j++)
-                    // 삼항연산자!!!!
-                    array[i][j] = (i == j ? 1 : 0);
-                    cout << array[i][j] << " ";
-                cout << endl;
+                    m1[i][j] = (i == j ? 1 : 0);
+            return m1;
         }
 
-        void getIndex(const int& row_idx, const int& col_idx)
+        Matrix getElement(const int& row_idx, const int& col_idx)
         {
-            cout << 
+            if (col_idx == -1)
+            {
+                return mat[row_idx]; 
+            }
+            else if (row_idx == -1)
+            {
+                return m
+            
+            }
+            else if ((col_idx && row_idx) != -1)
+            {
+
+            }
+            
+       
+            
         }
-
-        
-
-
 };
