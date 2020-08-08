@@ -151,7 +151,7 @@ ostream& operator <<(ostream &out, Queue<T> &q){
     }
     out << "] rear" << endl;
     return out;
-}k
+}
 
 int main()
 {
